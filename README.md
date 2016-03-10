@@ -91,11 +91,84 @@ toc: true
 ```
 
 ### 创建model
-
+	见model包下面的User.java文件
+```
+public class User {
+	private int user_id;
+	private int user_type;
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+	public int getUser_type() {
+		return user_type;
+	}
+	public void setUser_type(int user_type) {
+		this.user_type = user_type;
+	}
+	
+}
+```
 ### 创建mapper DAO
+	见dao包下面的UserDAO.java
+```
+public interface UserDAO {
+
+	@Select("select * from ysyy_user where user_id=#{user_id} and user_type=#{user_type}")
+	User getUser(@Param("user_id")int user_id,@Param("user_type")int user_type);
+}
+```
 
 ### 创建控制器
+	见controller下面的UsrController.java
+```
+@RestController
+@EnableAutoConfiguration
+public class UserController {
+	
+	@Autowired
+	private UserDAO userDAO;
+	
+	@RequestMapping("/user")
+	@ResponseBody
+	User getUser(){
+		return userDAO.getUser(971, 2);
+	}
+
+/*	public static void main(String[] args){
+		SpringApplication.run(SampleController.class,args);
+	}*/
+}
+```
 
 ### 指定入口
+	见App.java
+```
+@SpringBootApplication
+public class App 
+{
+    public static void main( String[] args )
+    {
+    	 SpringApplication.run(App.class, args);
+    }
+}
+```
 
 ### 启动运行
+```
+mvn clean install
+java -jar spring-boot-mybatis-web
+```
+
+### 测试
+在浏览器中输入
+```
+localhost:8080/user
+```
+
+### 返回结果
+```
+{"user_id":971,"user_type":2}
+```
